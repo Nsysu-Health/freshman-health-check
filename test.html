@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<input type="text">
+	<button class="" id="submit">送出</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+	const submit = document.getElementById('submit')
+	const googleUrl ="https://script.google.com/macros/s/AKfycby-OfzzJdrgj3gDRT0ERX70Bg_33CmPNtFrcDSadyENB3H5SEp-_yMwkECogj5gcMg6Hg/exec"
+	submit.addEventListener('click',()=>{
+		axios(
+			{
+				method:'post',
+				url:googleUrl,
+				data:{
+					"ID":"B111111",
+					"NAME":"amy"
+				}
+			}
+		)
+		.then((response)=>alert(response))
+		.catch((error)=>alert(error))
+	})
+</script>
+</body>
+</html>
