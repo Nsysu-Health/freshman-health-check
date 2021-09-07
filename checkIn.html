@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous" />
+  </head>
+  <body>
+    <div class="main mx-auto text-center mt-5 d-flex flex-column">
+      <h1>報到登記</h1>
+      <form action="" id="form">
+        <label for="" class="fs-4 w-25">
+          健檢編號
+          <input type="text" class="form-control w-100" id="studentId" name="ID" placeholder="請輸入健檢編號" />
+        </label>
+        <button type="submit" id="checkButton" class="btn btn-primary mt-3 d-block mx-auto">送出</button>
+
+        <div class="mt-4 d-none" id="search">
+          <div class="spinner-border text-danger d-block mx-auto" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="text-danger fs-2">查詢中...</p>
+        </div>
+      </form>
+    </div>
+    <div class="modal fade" id="checkModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">登記確認</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body fs-3">
+            <p id="modalDepartment"></p>
+            <p id="modalName"></p>
+            <p id="modalId"></p>
+            <p id="modalPaid" class="fs-2 text-danger"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary mx-auto" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-warning d-none" id="button-paid">確認已現場繳費</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script>
+    const checkButton = document.getElementById('checkButton')
+    const form = document.getElementById('form')
+
+    let checkModal = new bootstrap.Modal(document.getElementById('checkModal'))
+    form.addEventListener('submit', (e) => {
+      const googleUrl = 'https://script.google.com/macros/s/AKfycbx5tuKrgRiAmuueSVCzNJ7r5G9fs6SfUfLZoSoq735SI1qaPg0h4mIUSgOsnCx2t6dmmA/exec'
+      e.preventDefault()
+      let formData = new FormData(form)
+      document.getElementById('search').classList.toggle('d-none')
+      // document.getElementById('search').classList.add('d-block')
+      fetch(googleUrl, {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          console.log(data)
+          if (data.paid) {
+            if (data.paid === 2) {
+              document.getElementById('modalPaid').textContent = '確認已繳費(現場)'
+            } else {
+              document.getElementById('modalPaid').textContent = '確認已繳費'
+            }
+            form.reset()
+          } else {
+            document.getElementById('modalPaid').textContent = '尚未繳費，請確認是否有現場劃撥'
+            document.getElementById('button-paid').classList.remove('d-none')
+          }
+
+          document.getElementById('modalDepartment').textContent = '系所：' + data.dept[0][0]
+          document.getElementById('modalName').textContent = '姓名：' + data.name[0][0]
+          document.getElementById('modalId').textContent = '學號：' + data.studentId[0][0]
+          checkModal.show()
+          document.getElementById('search').classList.toggle('d-none')
+        })
+        .catch((err) => {
+          document.getElementById('search').classList.toggle('d-none')
+          alert('查無此學生')
+        })
+    })
+    const buttonPaid = document.getElementById('button-paid')
+    buttonPaid.addEventListener('click', () => {
+      const paidUrl = 'https://script.google.com/macros/s/AKfycbyO0WzsdJyp7-X-bRrIMP_nCZdvYYmyvgkf-ooC1DBg1g48JxYL2vDGXRh5LoDCUtQN/exec'
+      let formData = new FormData(form)
+      document.getElementById('search').classList.toggle('d-none')
+      fetch(paidUrl, {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => {
+          return response.json()
+        })
+        .then((data) => {
+          if (data) {
+            alert('已成功報到')
+            console.log(data)
+            document.getElementById('search').classList.toggle('d-none')
+            form.reset()
+          }
+        })
+        .catch((err) => {
+          document.getElementById('search').classList.toggle('d-none')
+          alert('error')
+        })
+    })
+  </script>
+</html>

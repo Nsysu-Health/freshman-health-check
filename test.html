@@ -1,32 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-</head>
-<body>
-	<input type="text">
-	<button class="" id="submit">送出</button>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-	const submit = document.getElementById('submit')
-	const googleUrl ="https://script.google.com/macros/s/AKfycby-OfzzJdrgj3gDRT0ERX70Bg_33CmPNtFrcDSadyENB3H5SEp-_yMwkECogj5gcMg6Hg/exec"
-	submit.addEventListener('click',()=>{
-		axios(
-			{
-				method:'post',
-				url:googleUrl,
-				data:{
-					"ID":"B111111",
-					"NAME":"amy"
-				}
-			}
-		)
-		.then((response)=>alert(response))
-		.catch((error)=>alert(error))
-	})
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="w-75 mx-auto">
+      <form id="form" class="d-flex justify-content-center">
+        <label for="studentId">學號</label>
+        <input type="text" id="studentId" name="ID" class="" />
+        <button class="" id="submit">送出</button>
+      </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      const submit = document.getElementById('submit')
+
+      const googleUrl = 'https://script.google.com/macros/s/AKfycbyG1iEI4FEl4nBOXVRSnmOPoiabfZqN3Kd_kzKUNpDprfjZ7xbrMuyMBqWpAZ0-5AYBTg/exec'
+      form.addEventListener('submit', (e) => {
+        const form = document.getElementById('form')
+        let formData = new FormData(form)
+        console.log(formData)
+        fetch(googleUrl, {
+          method: 'POST',
+          body: formData,
+        })
+          .then((response) => {
+            return response.json()
+          })
+          .then((data) => {
+            console.log(data.id[0][0])
+          })
+          .catch((err) => {
+            console.log('錯誤:', err)
+          })
+        e.preventDefault()
+      })
+    </script>
+  </body>
 </html>
