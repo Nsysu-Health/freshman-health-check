@@ -8,14 +8,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous" />
   </head>
   <body>
-    <div class="position-absolute ms-5">
-      <a href="index.html"><button class="btn btn-primary">返回首頁</button></a>
-    </div>
     <div class="main mx-auto text-center mt-5 d-flex flex-column">
-      <h1>劃撥單登記</h1>
+      <h1>健檢編號查詢</h1>
       <form action="" id="form">
         <label for="" class="fs-4 w-25">
-          學號
+          請輸入您的學號
           <input type="text" class="form-control w-100" id="studentId" name="ID" placeholder="請輸入學號" />
         </label>
         <button type="submit" id="checkButton" class="btn btn-primary mt-3 d-block mx-auto">送出</button>
@@ -31,13 +28,15 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">劃撥確認</h5>
+            <h5 class="modal-title" id="staticBackdropLabel">健檢編號查詢結果</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body fs-3">
+            <h1 id="modalId" class="text-bold"></h1>
             <p id="modalDepartment"></p>
             <p id="modalName"></p>
-            <p id="modalId"></p>
+            <p id="modalStudentId"></p>
+            <p id="alertContent" class="text-danger"></p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary mx-auto" data-bs-dismiss="modal">Close</button>
@@ -50,7 +49,7 @@
   <script>
     const checkButton = document.getElementById('checkButton')
     const form = document.getElementById('form')
-    const googleUrl = 'https://script.google.com/macros/s/AKfycbwrPQ_05dtG7SbNVtVutxOM-E2qWkN8iBsI4Ls11ILMNRKA6ocGf-Wp1ptkE3LbGb9cDA/exec'
+    const googleUrl = 'https://script.google.com/macros/s/AKfycbybnSg2778_qg1yEtvMi_RCG_YBSKr7w6QOjOB7kJpmv399DK4c9jyXyQm4C1v6Zcrh/exec'
     let checkModal = new bootstrap.Modal(document.getElementById('checkModal'))
     form.addEventListener('submit', (e) => {
       e.preventDefault()
@@ -67,18 +66,25 @@
           return response.json()
         })
         .then((data) => {
+          if (data.checkpaid) {
+            document.getElementById('alertContent').innerHTML = '您已繳費，請直接向報到處報到 <br> 若資料有誤，請再向報到人員告知'
+          } else {
+            document.getElementById('alertContent').innerHTML = '您尚未繳費，請於現場繳費後報到 <br> 若資料有誤，請再向報到人員告知'
+          }
+          document.getElementById('modalId').textContent = '健檢編號：' + data.id[0][0]
           document.getElementById('modalDepartment').textContent = '系所：' + data.dept[0][0]
           document.getElementById('modalName').textContent = '姓名：' + data.name[0][0]
-          document.getElementById('modalId').textContent = '學號：' + data.id[0][0]
+          document.getElementById('modalStudentId').textContent = '學號：' + data.studentId[0][0]
           checkModal.show()
           document.getElementById('search').classList.toggle('d-none')
           form.reset()
-          console.log(data.id[0][0])
-          console.log(new Date() - nowTime)
+          //   console.log(data.id[0][0])
+          //   console.log(new Date() - nowTime)
         })
         .catch((err) => {
           document.getElementById('search').classList.toggle('d-none')
-          alert('查無此學生')
+          document.getElementById('alertContent').innerHTML = '查無此學號 <br> 若您為轉學生、碩士候補生等符合新生健檢條件學生，請直接排隊於報到處報到'
+          checkModal.show()
         })
     })
   </script>
