@@ -9,12 +9,15 @@
   </head>
   <body>
     <div class="main mx-auto text-center mt-5 d-flex flex-column">
-      <h1>健檢編號查詢</h1>
+      <div class="d-flex justify-content-center align-items-center">
+        <img src="NSYSU.png" class="col-1  me-3" alt="">
+        <h1>健檢編號查詢</h1>
+      </div>
       <a href="https://selcrs.nsysu.edu.tw/newstu/stu_new.asp?action=14" target="_blank">點此查詢學號</a>
       <form action="" id="form">
         <label for="" class="fs-4 w-100">
           請輸入您的學號
-          <input type="text" class="form-control w-75 mx-auto" id="studentId" name="ID" placeholder="請輸入學號" />
+          <input type="text" class="form-control w-25 mx-auto" id="studentId" name="studentId" placeholder="請輸入學號" />
         </label>
         <button type="submit" id="checkButton" class="btn btn-primary mt-3 d-block mx-auto">送出</button>
         <div class="mt-4 d-none" id="search">
@@ -24,6 +27,9 @@
           <p class="text-danger fs-2">查詢中...</p>
         </div>
       </form>
+    </div>
+    <div class="my-3">
+      <img src="photo.jpg" alt="" class="w-75 mx-auto d-block">
     </div>
     <div class="modal fade" id="checkModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -50,7 +56,7 @@
   <script>
     const checkButton = document.getElementById('checkButton')
     const form = document.getElementById('form')
-    const googleUrl = 'https://script.google.com/macros/s/AKfycbybnSg2778_qg1yEtvMi_RCG_YBSKr7w6QOjOB7kJpmv399DK4c9jyXyQm4C1v6Zcrh/exec'
+    const googleUrl = 'https://script.google.com/macros/s/AKfycbyy9h3Q7-Kg2OObyG_eJ9wVXAxX82k8EfrX8pnhzAV2RLVnOEVTAsbLU3068vQnTMM/exec'
     let checkModal = new bootstrap.Modal(document.getElementById('checkModal'))
     form.addEventListener('submit', (e) => {
       e.preventDefault()
@@ -72,10 +78,10 @@
           } else {
             document.getElementById('alertContent').innerHTML = '您尚未繳費，請於現場繳費後報到 <br> 若資料有誤，請再向報到人員告知'
           }
-          document.getElementById('modalId').textContent = '健檢編號：' + data.id[0][0]
-          document.getElementById('modalDepartment').textContent = '系所：' + data.dept[0][0]
-          document.getElementById('modalName').textContent = '姓名：' + data.name[0][0]
-          document.getElementById('modalStudentId').textContent = '學號：' + data.studentId[0][0]
+          document.getElementById('modalId').textContent = '健檢編號：' + data.id
+          document.getElementById('modalDepartment').textContent = '系所：' + data.department
+          document.getElementById('modalName').textContent = '姓名：' + data.name
+          document.getElementById('modalStudentId').textContent = '學號：' + data.studentId
           checkModal.show()
           document.getElementById('search').classList.toggle('d-none')
           form.reset()
