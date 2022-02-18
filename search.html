@@ -17,7 +17,7 @@
       <form action="" id="form">
         <label for="" class="fs-4 w-100">
           請輸入您的學號
-          <input type="text" class="form-control w-75 mx-auto" id="studentId" name="studentId" placeholder="請輸入學號" />
+          <input type="text" class="form-control w-75 mx-auto" id="studentId" name="studentId" placeholder="請輸入學號(第一個字母大寫) EX：B101010001" />
         </label>
         <button type="submit" id="checkButton" class="btn btn-primary mt-3 d-block mx-auto">送出</button>
         <div class="mt-4 d-none" id="search">
@@ -74,9 +74,9 @@
         })
         .then((data) => {
           if (data.checkpaid) {
-            document.getElementById('alertContent').innerHTML = '您已繳費，請直接向報到處報到 <br> 若資料有誤，請再向報到人員告知'
+            document.getElementById('alertContent').innerHTML = '您已繳費。 <br> (1)請先拿取體檢表並完成關懷問卷 <br> (2)向一號櫃檯報到健檢編號 <br> 若資料有誤，請再向報到人員告知'
           } else {
-            document.getElementById('alertContent').innerHTML = '您尚未繳費，請於現場繳費後報到 <br> 若資料有誤，請再向報到人員告知'
+            document.getElementById('alertContent').innerHTML = '您尚未繳費。<br> (1)請先拿取體檢表並完成關懷問卷<br> (2)向二號櫃台現場繳費<br> (3)向一號櫃檯報到健檢編號 <br> 若資料有誤，請再向報到人員告知'
           }
           document.getElementById('modalId').textContent = '健檢編號：' + data.id
           document.getElementById('modalDepartment').textContent = '系所：' + data.department
