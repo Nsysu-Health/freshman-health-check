@@ -74,9 +74,9 @@
         })
         .then((data) => {
           if (data.checkpaid) {
-            document.getElementById('alertContent').innerHTML = '您已繳費。 <br> (1)請先拿取體檢表並完成關懷問卷 <br> (2)向一號櫃檯報到健檢編號 <br> 若資料有誤，請再向報到人員告知'
+            document.getElementById('alertContent').innerHTML = '您已繳費。 <br> (1)請先拿取體檢表並完成關懷問卷 <br> (2)向一號櫃檯報到告知健檢編號 <br> 若資料有誤，請再向報到人員告知'
           } else {
-            document.getElementById('alertContent').innerHTML = '您尚未繳費。<br> (1)請先拿取體檢表並完成關懷問卷<br> (2)向二號櫃台現場繳費<br> (3)向一號櫃檯報到健檢編號 <br> 若資料有誤，請再向報到人員告知'
+            document.getElementById('alertContent').innerHTML = '您尚未繳費。<br> (1)請先拿取體檢表並完成關懷問卷<br> (2)向二號櫃台現場繳費<br> (3)向一號櫃檯報到告知健檢編號 <br> 若資料有誤，請再向報到人員告知'
           }
           document.getElementById('modalId').textContent = '健檢編號：' + data.id
           document.getElementById('modalDepartment').textContent = '系所：' + data.department
